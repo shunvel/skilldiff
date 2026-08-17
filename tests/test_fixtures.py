@@ -6,7 +6,8 @@ from pathlib import Path
 from skilldiff.models import Task
 from skilldiff.tools_schema import load_tools_from_script
 
-FIXTURE = Path("fixtures/demo-repo")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+FIXTURE = REPO_ROOT / "fixtures/demo-repo"
 
 
 def test_fixture_tasks_cover_sanity_and_eval() -> None:

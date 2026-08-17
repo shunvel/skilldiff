@@ -45,7 +45,6 @@ Changelog = "https://github.com/shunvel/skilldiff/blob/main/CHANGELOG.md"
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
-    "pytest-asyncio>=0.23",
     "ruff>=0.6",
     "mypy>=1.8",
 ]
@@ -55,9 +54,7 @@ packages = ["skilldiff"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-asyncio_mode = "auto"
-asyncio_default_fixture_loop_scope = "function"
-addopts = "-q --tb=short"
+addopts = "--tb=short"
 pythonpath = ["."]
 
 [tool.ruff]
