@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fetch_page_title",
+    "prompt": "Fetch the title of https://example.com and return only the title text.",
+    "expected_outcome": "The agent returns 'Example Domain' as the page title.",
+    "tags": ["sanity"]
+  },
+  {
+    "id": "summarize_notes",
+    "prompt": "Summarize the contents of notes.txt in one concise sentence.",
+    "expected_outcome": "The agent returns a one-sentence summary mentioning skilldiff or comparing agent tool sets.",
+    "tags": ["sanity"]
+  },
+  {
+    "id": "parse_title_offline",
+    "prompt": "Extract the HTML page title from this fragment and return only the title text: <html><head><title>Example Domain</title></head></html>",
+    "expected_outcome": "The agent returns 'Example Domain' without fetching a URL.",
+    "tags": ["eval"]
+  },
+  {
+    "id": "summarize_given_text",
+    "prompt": "Summarize this text in at most 12 words: skilldiff helps compare agent tool sets quickly during development.",
+    "expected_outcome": "A short summary that still mentions skilldiff or comparing tools. Prefer a dedicated summarize tool if available.",
+    "tags": ["eval"]
+  }
+]

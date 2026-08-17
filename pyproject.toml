@@ -8,9 +8,10 @@ version = "0.1.0"
 description = "A/B test AI agent skills, prompts, and tool definitions with LLM-as-a-Judge"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 authors = [{ name = "shunvel", email = "shunvel@gmail.com" }]
-keywords = ["ai", "agents", "testing", "cli", "gemini"]
+keywords = ["ai", "agents", "evals", "llm-as-a-judge", "cli", "gemini", "ollama"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -20,6 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Testing",
 ]
 dependencies = [
@@ -38,11 +40,14 @@ skilldiff = "skilldiff.main:app"
 Homepage = "https://github.com/shunvel/skilldiff"
 Repository = "https://github.com/shunvel/skilldiff"
 Issues = "https://github.com/shunvel/skilldiff/issues"
+Changelog = "https://github.com/shunvel/skilldiff/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
     "pytest-asyncio>=0.23",
+    "ruff>=0.6",
+    "mypy>=1.8",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -51,3 +56,17 @@ packages = ["skilldiff"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.mypy]
+python_version = "3.10"
+packages = ["skilldiff"]
+ignore_missing_imports = true
+warn_unused_ignores = true

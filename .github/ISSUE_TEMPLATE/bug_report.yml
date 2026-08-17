@@ -1,0 +1,24 @@
+name: Bug report
+description: Something is broken or unexpected
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Commands, provider (`gemini` / `ollama`), model, and a minimal tasks/tools snippet. Redact API keys.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: skilldiff version / commit
+    validations:
+      required: true

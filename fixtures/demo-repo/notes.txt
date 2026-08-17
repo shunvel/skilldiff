@@ -1,0 +1,1 @@
+skilldiff helps compare agent tool sets quickly during development.

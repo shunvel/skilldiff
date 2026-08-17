@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 from urllib import error, request
 
 from google import genai
@@ -100,7 +100,7 @@ class GeminiBackend(LLMBackend):
                     name=spec.name,
                     description=spec.description,
                     parameters=types.Schema(
-                        type="OBJECT",
+                        type="OBJECT",  # type: ignore[arg-type]
                         properties={
                             key: types.Schema(
                                 type=value.get("type", "string").upper(),
@@ -115,13 +115,11 @@ class GeminiBackend(LLMBackend):
                 for spec in tools
             ]
             config_kwargs["tools"] = [types.Tool(function_declarations=declarations)]
-            config_kwargs["automatic_function_calling"] = (
-                types.AutomaticFunctionCallingConfig(disable=True)
-            )
+            config_kwargs["automatic_function_calling"] = types.AutomaticFunctionCallingConfig(disable=True)
 
         response = await self.client.aio.models.generate_content(
             model=self.model,
-            contents=contents,
+            contents=contents,  # type: ignore[arg-type]
             config=types.GenerateContentConfig(**config_kwargs),
         )
         return _gemini_response_to_turn(response)
@@ -176,11 +174,7 @@ class OllamaBackend(LLMBackend):
                 {"role": "system", "content": system},
                 {
                     "role": "user",
-                    "content": (
-                        f"{prompt}\n\n"
-                        "Respond with JSON matching this schema:\n"
-                        f"{json.dumps(schema, indent=2)}"
-                    ),
+                    "content": (f"{prompt}\n\nRespond with JSON matching this schema:\n{json.dumps(schema, indent=2)}"),
                 },
             ],
             "stream": False,
@@ -211,9 +205,7 @@ async def _post_json(url: str, payload: dict[str, Any]) -> dict[str, Any]:
             detail = exc.read().decode("utf-8", errors="replace")
             raise RuntimeError(f"HTTP {exc.code} from {url}: {detail}") from exc
         except error.URLError as exc:
-            raise RuntimeError(
-                f"Could not reach Ollama at {url}. Is `ollama serve` running?"
-            ) from exc
+            raise RuntimeError(f"Could not reach Ollama at {url}. Is `ollama serve` running?") from exc
 
     return await asyncio.to_thread(_send)
 
@@ -300,17 +292,19 @@ def _gemini_response_to_turn(response: types.GenerateContentResponse) -> AgentTu
 
     if not text and parts:
         texts = [part.text for part in parts if getattr(part, "text", None)]
-        text = "\n".join(texts).strip()
+        text = "\n".join(t for t in texts if t).strip()
 
     tool_calls: list[ToolCall] = []
-    for part in parts:
-        if getattr(part, "function_call", None) is not None:
-            tool_calls.append(
-                ToolCall(
-                    name=part.function_call.name or "unknown_tool",
-                    args=dict(part.function_call.args or {}),
-                )
+    for part in parts or []:
+        function_call = getattr(part, "function_call", None)
+        if function_call is None:
+            continue
+        tool_calls.append(
+            ToolCall(
+                name=function_call.name or "unknown_tool",
+                args=dict(function_call.args or {}),
             )
+        )
 
     model_content = candidate.content if candidate and candidate.content else None
     return AgentTurn(text=text, tool_calls=tool_calls, model_content=model_content)
@@ -326,9 +320,7 @@ def append_assistant_message(
 
     message: dict[str, Any] = {"role": "assistant", "content": turn.text}
     if turn.tool_calls:
-        message["tool_calls"] = [
-            {"name": call.name, "args": call.args} for call in turn.tool_calls
-        ]
+        message["tool_calls"] = [{"name": call.name, "args": call.args} for call in turn.tool_calls]
     messages.append(message)
 
 

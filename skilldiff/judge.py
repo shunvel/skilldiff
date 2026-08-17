@@ -33,17 +33,12 @@ def short_circuit_verdict(
     variant: AgentTrajectory,
 ) -> Optional[JudgeVerdict]:
     """Return a tie verdict without calling the LLM when outputs are identical."""
-    if (
-        baseline.final_output == variant.final_output
-        and baseline.total_steps == variant.total_steps
-    ):
+    if baseline.final_output == variant.final_output and baseline.total_steps == variant.total_steps:
         return JudgeVerdict(
             winner="tie",
             baseline_score=5.0,
             variant_score=5.0,
-            reasoning=(
-                "Short-circuit: final outputs match exactly and step counts are equal."
-            ),
+            reasoning=("Short-circuit: final outputs match exactly and step counts are equal."),
             tool_regression_detected=False,
             fix_suggestion=None,
         )
@@ -85,17 +80,13 @@ class TrajectoryJudge:
         if cached is not None:
             return cached
 
-        primary = await self._call_judge(
-            task, baseline, variant, baseline_is_first=True
-        )
+        primary = await self._call_judge(task, baseline, variant, baseline_is_first=True)
         primary = enforce_score_parity(primary)
 
         if not swap_order:
             return primary
 
-        swapped = await self._call_judge(
-            task, variant, baseline, baseline_is_first=False
-        )
+        swapped = await self._call_judge(task, variant, baseline, baseline_is_first=False)
         swapped = enforce_score_parity(swapped)
 
         if primary.winner != swapped.winner:
@@ -109,9 +100,7 @@ class TrajectoryJudge:
                     f"Primary reasoning: {primary.reasoning}\n\n"
                     f"Swapped reasoning: {swapped.reasoning}"
                 ),
-                tool_regression_detected=(
-                    primary.tool_regression_detected or swapped.tool_regression_detected
-                ),
+                tool_regression_detected=(primary.tool_regression_detected or swapped.tool_regression_detected),
                 fix_suggestion=primary.fix_suggestion or swapped.fix_suggestion,
             )
 

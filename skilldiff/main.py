@@ -6,7 +6,7 @@ import asyncio
 import json
 import os
 from pathlib import Path
-from typing import Annotated, Literal, Optional
+from typing import Annotated, Optional, cast
 
 import typer
 from dotenv import load_dotenv
@@ -229,11 +229,11 @@ def run(
     baseline_tools: Annotated[
         Path,
         typer.Option("--baseline-tools", help="Python script with baseline tool functions."),
-    ] = ...,
+    ] = cast(Path, ...),
     variant_tools: Annotated[
         Path,
         typer.Option("--variant-tools", help="Python script with variant tool functions."),
-    ] = ...,
+    ] = cast(Path, ...),
     provider: Annotated[
         ProviderName,
         typer.Option(
@@ -279,9 +279,7 @@ def run(
     backend = _resolve_backend(provider, model, ollama_host)
     task_list = _load_tasks(tasks, quick)
 
-    console.print(
-        f"[dim]Provider: {provider} | Model: {backend.model}[/dim]"
-    )
+    console.print(f"[dim]Provider: {provider} | Model: {backend.model}[/dim]")
 
     runner = SimpleAgentRunner(
         backend=backend,
@@ -291,9 +289,7 @@ def run(
     )
     judge = TrajectoryJudge(backend=backend)
 
-    results = asyncio.run(
-        _run_suite(task_list, runner, judge, swap_order=swap_order)
-    )
+    results = asyncio.run(_run_suite(task_list, runner, judge, swap_order=swap_order))
     report = build_report(results, quick_mode=quick, swap_order=swap_order)
     _, decision = publish_report(
         report,

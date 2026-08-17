@@ -110,10 +110,7 @@ def publish_report(
     if min_win_rate is not None and report.summary.win_rate_pct < min_win_rate:
         return output_path, ExitDecision(
             code=1,
-            message=(
-                f"Win rate {report.summary.win_rate_pct:.1f}% is below "
-                f"minimum {min_win_rate:.1f}%."
-            ),
+            message=(f"Win rate {report.summary.win_rate_pct:.1f}% is below minimum {min_win_rate:.1f}%."),
         )
 
     return output_path, ExitDecision(code=0)
