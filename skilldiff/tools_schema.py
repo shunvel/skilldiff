@@ -53,6 +53,7 @@ def load_tools_from_script(script_path: Path) -> dict[str, Callable[..., Any]]:
         raise ImportError(f"Unable to load tool script: {script_path}")
 
     module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
     parent_dir = str(script_path.parent.resolve())
     if parent_dir not in sys.path:
         sys.path.insert(0, parent_dir)
