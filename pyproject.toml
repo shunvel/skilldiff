@@ -56,7 +56,8 @@ packages = ["skilldiff"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-addopts = "-q"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-q --tb=short"
 pythonpath = ["."]
 
 [tool.ruff]

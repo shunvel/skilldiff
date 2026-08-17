@@ -49,4 +49,5 @@ def test_messages_to_gemini_contents_replays_raw_model_content() -> None:
         ]
     )
     assert contents[1] is model_content
+    assert contents[2].parts is not None
     assert contents[2].parts[0].function_response is not None
