@@ -1,0 +1,14 @@
+[
+  {
+    "id": "fetch_page_title",
+    "prompt": "Fetch the title of https://example.com and return only the title text.",
+    "expected_outcome": "The agent returns 'Example Domain' as the page title.",
+    "tags": ["sanity"]
+  },
+  {
+    "id": "summarize_notes",
+    "prompt": "Summarize the contents of notes.txt in one concise sentence.",
+    "expected_outcome": "The agent returns a one-sentence summary mentioning skilldiff or comparing agent tool sets.",
+    "tags": ["sanity"]
+  }
+]
