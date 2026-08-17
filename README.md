@@ -1,8 +1,8 @@
 # skilldiff
 
-[![CI](https://github.com/shunvel/skilldiff/actions/workflows/ci.yml/badge.svg)](https://github.com/shunvel/skilldiff/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/pypi/v/skilldiff.svg)](https://pypi.org/project/skilldiff/)
-[![Python versions](https://img.shields.io/pypi/pyversions/skilldiff.svg)](https://pypi.org/project/skilldiff/)
+[![CI](https://github.com/shunvel/skilldiff/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/shunvel/skilldiff/actions/workflows/ci.yml?query=branch%3Amain)
+[![PyPI version](https://img.shields.io/pypi/v/skilldiff.svg?logo=pypi&label=PyPI)](https://pypi.org/project/skilldiff/)
+[![Python versions](https://img.shields.io/pypi/pyversions/skilldiff.svg?logo=python&label=python)](https://pypi.org/project/skilldiff/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Adding a tool, rewriting a skill, or swapping a system prompt is cheap. Knowing whether the agent got *better* is not. Offline evals score a final answer. They miss the trajectory: extra tool hops, silent regressions, and “it still printed the right string” failures.

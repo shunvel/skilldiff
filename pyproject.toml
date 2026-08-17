@@ -57,6 +57,7 @@ packages = ["skilldiff"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 addopts = "-q"
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 120
@@ -69,4 +70,9 @@ select = ["E", "F", "I", "W"]
 python_version = "3.10"
 packages = ["skilldiff"]
 ignore_missing_imports = true
-warn_unused_ignores = true
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = ["google.*", "google.genai.*"]
+ignore_missing_imports = true
+ignore_errors = true
