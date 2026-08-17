@@ -1,19 +1,27 @@
 """Tests for Gemini thought_signature history preservation."""
 
+import pytest
 from google.genai import types
 
 from skilldiff.llm import AgentTurn, ToolCall, _messages_to_gemini_contents, append_assistant_message
 
 
+def _model_content(*, name: str, args: dict, signature: bytes) -> types.Content:
+    try:
+        part = types.Part(
+            function_call=types.FunctionCall(name=name, args=args),
+            thought_signature=signature,
+        )
+    except (TypeError, ValueError) as exc:
+        pytest.skip(f"google-genai Part() rejected thought_signature: {exc}")
+    return types.Content(role="model", parts=[part])
+
+
 def test_append_assistant_message_preserves_gemini_model_content() -> None:
-    model_content = types.Content(
-        role="model",
-        parts=[
-            types.Part(
-                function_call=types.FunctionCall(name="fetch_url", args={"url": "https://x.com"}),
-                thought_signature=b"sig-bytes",
-            )
-        ],
+    model_content = _model_content(
+        name="fetch_url",
+        args={"url": "https://x.com"},
+        signature=b"sig-bytes",
     )
     turn = AgentTurn(
         text="",
@@ -28,14 +36,10 @@ def test_append_assistant_message_preserves_gemini_model_content() -> None:
 
 
 def test_messages_to_gemini_contents_replays_raw_model_content() -> None:
-    model_content = types.Content(
-        role="model",
-        parts=[
-            types.Part(
-                function_call=types.FunctionCall(name="read_text_file", args={"path": "a.txt"}),
-                thought_signature=b"keep-me",
-            )
-        ],
+    model_content = _model_content(
+        name="read_text_file",
+        args={"path": "a.txt"},
+        signature=b"keep-me",
     )
     contents = _messages_to_gemini_contents(
         [

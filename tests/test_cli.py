@@ -14,9 +14,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 def test_demo_exits_zero_and_writes_json(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, ["demo", "--output-dir", ".agent_diff"])
-    assert result.exit_code == 0, result.output
-    assert "skilldiff Results" in result.output
-    assert "Win Rate" in result.output
+    combined = f"{result.output}\n{result.stdout}\n{getattr(result, 'stderr', '')}"
+    assert result.exit_code == 0, combined
+    assert "skilldiff Results" in combined
+    assert "Win Rate" in combined
 
     output_dir = tmp_path / ".agent_diff"
     files = list(output_dir.glob("results_*.json"))

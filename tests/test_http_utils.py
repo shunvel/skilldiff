@@ -6,9 +6,11 @@ from unittest.mock import MagicMock, patch
 
 from skilldiff.tools_schema import load_tools_from_script
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
 
 def test_fetch_url_text_uses_certifi_context() -> None:
-    tools = load_tools_from_script(Path("examples/http_utils.py"))
+    tools = load_tools_from_script(REPO_ROOT / "examples/http_utils.py")
     fetch_url_text = tools["fetch_url_text"]
     module = sys.modules[fetch_url_text.__module__]
 
