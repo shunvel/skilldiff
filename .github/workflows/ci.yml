@@ -33,5 +33,5 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[dev]"
-      - run: pytest -v
+      - run: python -m pytest -v --tb=short
       - run: skilldiff demo
